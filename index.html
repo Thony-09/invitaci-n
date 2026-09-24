@@ -145,7 +145,8 @@
     <div class="stub-line"></div>
     <h2 id="finalTitle"></h2>
     <div class="summary" id="finalSummary"></div>
-    <a href="#" id="mailLink" class="mail-link">Enviar respuesta por correo</a>
+    <p class="nudge" id="sendStatus">Enviando tu respuesta...</p>
+    <a href="#" id="mailLink" class="mail-link hidden">Enviar respuesta por correo</a>
   </div>
 
 </div>
@@ -164,7 +165,7 @@
     emailjs.init(EMAILJS_PUBLIC_KEY);
   }
 
-  let plan = null, otraTexto = "", dia = null, otroDiaVal = "";
+ let plan = null, otraTexto = "", dia = null, otroDiaVal = "";
 
   const foodChips = document.querySelectorAll('#foodChips .chip');
   const otraIdea = document.getElementById('otraIdea');
@@ -268,15 +269,27 @@
     );
     document.getElementById('mailLink').href = `mailto:${MI_CORREO}?subject=${subject}&body=${body}`;
 
-    // Envío automático por EmailJS (solo funciona una vez publicado en tu propio
-    // hosting, p. ej. GitHub Pages, con tus claves de EmailJS configuradas arriba).
+    const statusEl = document.getElementById('sendStatus');
+    const mailLink = document.getElementById('mailLink');
+
+    // Envío automático por EmailJS apenas se confirma la respuesta.
+    // Solo funciona una vez publicado en tu propio hosting (GitHub Pages)
+    // con las 3 claves de EmailJS ya configuradas arriba.
     if (window.emailjs && EMAILJS_PUBLIC_KEY !== "TU_PUBLIC_KEY") {
       emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
         plan: planTexto(),
         dia: diaTexto(),
-        respuesta: respuesta === 'si' ? 'Sí' : 'No',
-        to_email: MI_CORREO
-      }).catch(err => console.error('EmailJS error:', err));
+        respuesta: respuesta === 'si' ? 'Sí' : 'No'
+      }).then(()=>{
+        statusEl.textContent = '✅ Tu respuesta ya fue enviada.';
+      }).catch((err)=>{
+        console.error('EmailJS error:', err);
+        statusEl.textContent = 'No se pudo enviar automáticamente. Usa este enlace:';
+        mailLink.classList.remove('hidden');
+      });
+    } else {
+      statusEl.textContent = 'Envío automático no configurado. Usa este enlace:';
+      mailLink.classList.remove('hidden');
     }
 
     document.getElementById('stepFinal').classList.remove('hidden');
