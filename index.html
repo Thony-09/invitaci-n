@@ -145,26 +145,13 @@
     <div class="stub-line"></div>
     <h2 id="finalTitle"></h2>
     <div class="summary" id="finalSummary"></div>
-    <p class="nudge" id="sendStatus">Enviando tu respuesta...</p>
-    <a href="#" id="mailLink" class="mail-link hidden">Enviar respuesta por correo</a>
+    <p class="nudge">📸 Toma captura de esta pantalla y mándasela por WhatsApp para agendar</p>
+    <a href="#" id="waLink" class="mail-link" target="_blank" rel="noopener">Enviar por WhatsApp</a>
   </div>
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
-  // Cambia este correo por el tuyo antes de compartir la página
-  const MI_CORREO = "infanteaquinoanthony31@gmail.com";
-
-  // Configuración de EmailJS (gratis, sin backend) — para que el envío sea
-  // automático necesitas crear una cuenta en emailjs.com y completar esto:
-  const EMAILJS_PUBLIC_KEY  = "NyXQ0QZUmY7W89R6A";
-  const EMAILJS_SERVICE_ID  = "service_utdrrt4";
-  const EMAILJS_TEMPLATE_ID = "template_u77cgao";
-  if (window.emailjs && EMAILJS_PUBLIC_KEY !== "NyXQ0QZUmY7W89R6A") {
-    emailjs.init(EMAILJS_PUBLIC_KEY);
-  }
-
   let plan = null, otraTexto = "", dia = null, otroDiaVal = "";
 
   const foodChips = document.querySelectorAll('#foodChips .chip');
@@ -263,34 +250,10 @@
        <div>Día: <span>${diaTexto()}</span></div>
        <div>Respuesta: <span>${respuesta === 'si' ? 'Sí' : 'No'}</span></div>`;
 
-    const subject = encodeURIComponent('Respuesta a tu propuesta de salida');
-    const body = encodeURIComponent(
-      `Plan: ${planTexto()}\nDía: ${diaTexto()}\nRespuesta: ${respuesta === 'si' ? 'Sí' : 'No'}`
+    const texto = encodeURIComponent(
+      `¡Hola! Propuesta de salida:\nPlan: ${planTexto()}\nDía: ${diaTexto()}\nRespuesta: ${respuesta === 'si' ? 'Sí' : 'No'}`
     );
-    document.getElementById('mailLink').href = `mailto:${MI_CORREO}?subject=${subject}&body=${body}`;
-
-    const statusEl = document.getElementById('sendStatus');
-    const mailLink = document.getElementById('mailLink');
-
-    // Envío automático por EmailJS apenas se confirma la respuesta.
-    // Solo funciona una vez publicado en tu propio hosting (GitHub Pages)
-    // con las 3 claves de EmailJS ya configuradas arriba.
-    if (window.emailjs && EMAILJS_PUBLIC_KEY !== "NyXQ0QZUmY7W89R6A") {
-      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        plan: planTexto(),
-        dia: diaTexto(),
-        respuesta: respuesta === 'si' ? 'Sí' : 'No'
-      }).then(()=>{
-        statusEl.textContent = '✅ Tu respuesta ya fue enviada.';
-      }).catch((err)=>{
-        console.error('EmailJS error:', err);
-        statusEl.textContent = 'No se pudo enviar automáticamente. Usa este enlace:';
-        mailLink.classList.remove('hidden');
-      });
-    } else {
-      statusEl.textContent = 'Envío automático no configurado. Usa este enlace:';
-      mailLink.classList.remove('hidden');
-    }
+    document.getElementById('waLink').href = `https://wa.me/?text=${texto}`;
 
     document.getElementById('stepFinal').classList.remove('hidden');
   }
