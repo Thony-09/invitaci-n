@@ -159,13 +159,13 @@
   // Configuración de EmailJS (gratis, sin backend) — para que el envío sea
   // automático necesitas crear una cuenta en emailjs.com y completar esto:
   const EMAILJS_PUBLIC_KEY  = "NyXQ0QZUmY7W89R6A";
-  const EMAILJS_SERVICE_ID  = "TU_SERVICE_ID";
-  const EMAILJS_TEMPLATE_ID = "service_utdrrt4";
+  const EMAILJS_SERVICE_ID  = "service_utdrrt4";
+  const EMAILJS_TEMPLATE_ID = "template_u77cgao";
   if (window.emailjs && EMAILJS_PUBLIC_KEY !== "NyXQ0QZUmY7W89R6A") {
     emailjs.init(EMAILJS_PUBLIC_KEY);
   }
 
- let plan = null, otraTexto = "", dia = null, otroDiaVal = "";
+  let plan = null, otraTexto = "", dia = null, otroDiaVal = "";
 
   const foodChips = document.querySelectorAll('#foodChips .chip');
   const otraIdea = document.getElementById('otraIdea');
